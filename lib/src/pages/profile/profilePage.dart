@@ -5,7 +5,7 @@ import 'package:flutter_news_app/src/theme/bloc/bloc.dart';
 import 'package:flutter_news_app/src/theme/theme.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key key}) : super(key: key);
+  const ProfilePage({super.key});
 
   Widget _headerWidget(BuildContext context) {
     return Container(
@@ -70,13 +70,13 @@ class ProfilePage extends StatelessWidget {
 
   Widget _settingRow(
       BuildContext context, IconData icon1, String text, bool isEnable,
-      {Color color = Colors.black, int index = 0}) {
+      {int index = 0}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 0),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       color: isEnable
           ? Theme.of(context).primaryColor.withAlpha(100)
-          : Theme.of(context).backgroundColor,
+          : Theme.of(context).colorScheme.surface,
       child: Row(
         children: <Widget>[
           Icon(
@@ -88,15 +88,13 @@ class ProfilePage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               )),
           Expanded(child: SizedBox()),
-          isEnable == null
-              ? Container()
-              : Switch(
+          Switch(
                   activeColor: Theme.of(context).primaryColor,
                   inactiveTrackColor: Theme.of(context).disabledColor,
                   onChanged: (value) {
                     if (index == 1) {
                       BlocProvider.of<ThemeBloc>(context)
-                          .add(isEnable ? DarkMode() : LightMode());
+                          .add(value ? DarkMode() : LightMode());
                     }
                   },
                   value: isEnable,
@@ -114,13 +112,13 @@ class ProfilePage extends StatelessWidget {
         children: <Widget>[
           Icon(
             icon1,
-            color: Theme.of(context).errorColor,
+            color: Theme.of(context).colorScheme.error,
           ),
           SizedBox(width: 10),
           Text(text,
               style: AppTheme.h3Style.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).errorColor)),
+                  color: Theme.of(context).colorScheme.error)),
           Expanded(child: SizedBox()),
         ],
       ),
@@ -130,12 +128,12 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: BlocBuilder<ThemeBloc, ThemeState>(
           builder: (context, state) {
             bool val = false;
             if (state is SelectedTheme) {
-              val = state.themeType == ThemeType.Light ? true : false;
+              val = state.themeType == ThemeType.light ? true : false;
             }
             return SafeArea(
               child: CustomScrollView(

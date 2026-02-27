@@ -1,26 +1,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_news_app/src/models/newsResponseModel.dart';
 
-
-abstract class NewsDetailEvent extends Equatable{
+abstract class NewsDetailEvent extends Equatable {
   const NewsDetailEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class SelectNewsForDetail extends NewsDetailEvent {
   final Article article;
-  const SelectNewsForDetail({this.article});
+
+  const SelectNewsForDetail({required this.article});
 
   @override
-  String toString() => 'SelectNewsForDetail Page { Title:: ${article.title} }';
-}
+  List<Object?> get props => [article];
 
-class SelectNewsForDetailed extends NewsDetailEvent {
-  final Article article;
-  const SelectNewsForDetailed({this.article});
-
-    @override
-  String toString() => 'SelectNewsForDetailed news { Title: ${article.title} }';
+  @override
+  String toString() => 'SelectNewsForDetail { title: ${article.title} }';
 }

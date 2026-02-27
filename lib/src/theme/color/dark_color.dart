@@ -18,8 +18,8 @@ class DarkColor {
   static const Color darkPink = Color(0xff6e3c7d);
   static const Color purple = Color(0xFF8E7FE0);
 
-  static const Color Brighter = Color(0xff1a1a1c);
-  static const Color Darker = Colors.black;
-  static const Color titleTextColor = const Color(0xffd1d1d0);
-  static const Color subTitleTextColor = const Color(0xff797878);
+  static const Color brighterAlt = Color(0xff1a1a1c);
+  static const Color darker = Colors.black;
+  static const Color titleTextColor = Color(0xffd1d1d0);
+  static const Color subTitleTextColor = Color(0xff797878);
 }

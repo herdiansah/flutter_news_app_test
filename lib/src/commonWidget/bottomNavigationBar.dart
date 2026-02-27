@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news_app/src/commonWidget/bloc/bloc.dart';
+import "package:flutter_news_app/src/theme/legacy_theme.dart";
 
 class BottomNavigationBarWidget extends StatelessWidget {
   final PageController controller;
-  const BottomNavigationBarWidget({Key key, this.controller}) : super(key: key);
+  const BottomNavigationBarWidget({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

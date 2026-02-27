@@ -1,56 +1,53 @@
 // To parse this JSON data, do
 //
-//     final newsApiResonse = newsApiResonseFromJson(jsonString);
+//     final newsApiResponse = NewsApiResponse.fromRawJson(jsonString);
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
 class NewsApiResonse {
-  String status;
-  int totalResults;
-  List<Article> articles;
+  final String? status;
+  final int? totalResults;
+  final List<Article> articles;
 
-  NewsApiResonse({
+  const NewsApiResonse({
     this.status,
     this.totalResults,
-    this.articles,
+    this.articles = const [],
   });
 
   factory NewsApiResonse.fromRawJson(String str) =>
-      NewsApiResonse.fromJson(json.decode(str));
+      NewsApiResonse.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory NewsApiResonse.fromJson(Map<String, dynamic> json) => NewsApiResonse(
-        status: json["status"] == null ? null : json["status"],
-        totalResults:
-            json["totalResults"] == null ? null : json["totalResults"],
-        articles: json["articles"] == null
-            ? null
-            : List<Article>.from(
-                json["articles"].map((x) => Article.fromJson(x))),
+        status: json['status'] as String?,
+        totalResults: json['totalResults'] as int?,
+        articles: (json['articles'] as List?)
+                ?.map((x) => Article.fromJson(x as Map<String, dynamic>))
+                .toList() ??
+            const [],
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status == null ? null : status,
-        "totalResults": totalResults == null ? null : totalResults,
-        "articles": articles == null
-            ? null
-            : List<dynamic>.from(articles.map((x) => x.toJson())),
+        'status': status,
+        'totalResults': totalResults,
+        'articles': articles.map((x) => x.toJson()).toList(),
       };
 }
 
 class Article {
-  Source source;
-  String author;
-  String title;
-  String description;
-  String url;
-  String urlToImage;
-  DateTime publishedAt;
-  String content;
+  final Source? source;
+  final String? author;
+  final String? title;
+  final String? description;
+  final String? url;
+  final String? urlToImage;
+  final DateTime? publishedAt;
+  final String? content;
 
-  Article({
+  const Article({
     this.source,
     this.author,
     this.title,
@@ -61,67 +58,73 @@ class Article {
     this.content,
   });
 
-  factory Article.fromRawJson(String str) => Article.fromJson(json.decode(str));
+  factory Article.fromRawJson(String str) =>
+      Article.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory Article.fromJson(Map<String, dynamic> json) => Article(
-        source: json["source"] == null ? null : Source.fromJson(json["source"]),
-        author: json["author"] == null ? null : json["author"],
-        title: json["title"] == null ? null : json["title"],
-        description: json["description"] == null ? null : json["description"],
-        url: json["url"] == null ? null : json["url"],
-        urlToImage: json["urlToImage"] == null ? null : json["urlToImage"],
-        publishedAt: json["publishedAt"] == null
+        source: json['source'] == null
             ? null
-            : DateTime.parse(json["publishedAt"]),
-        content: json["content"] == null ? null : json["content"],
+            : Source.fromJson(json['source'] as Map<String, dynamic>),
+        author: json['author'] as String?,
+        title: json['title'] as String?,
+        description: json['description'] as String?,
+        url: json['url'] as String?,
+        urlToImage: json['urlToImage'] as String?,
+        publishedAt: json['publishedAt'] == null
+            ? null
+            : DateTime.tryParse(json['publishedAt'] as String),
+        content: json['content'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        "source": source == null ? null : source.toJson(),
-        "author": author == null ? null : author,
-        "title": title == null ? null : title,
-        "description": description == null ? null : description,
-        "url": url == null ? null : url,
-        "urlToImage": urlToImage == null ? null : urlToImage,
-        "publishedAt":
-            publishedAt == null ? null : publishedAt.toIso8601String(),
-        "content": content == null ? null : content,
+        'source': source?.toJson(),
+        'author': author,
+        'title': title,
+        'description': description,
+        'url': url,
+        'urlToImage': urlToImage,
+        'publishedAt': publishedAt?.toIso8601String(),
+        'content': content,
       };
+
   String getTime() {
-    var formatter = new DateFormat('dd MMMM yyyy h:m');
-    String formatted = formatter.format(publishedAt);
-    return formatted;
+    final dt = publishedAt;
+    if (dt == null) return '';
+    final formatter = DateFormat('dd MMMM yyyy H:m');
+    return formatter.format(dt);
   }
 
   String getDateOnly() {
-    var formatter = new DateFormat('dd MMMM yyyy');
-    String formatted = formatter.format(publishedAt);
-    return formatted;
+    final dt = publishedAt;
+    if (dt == null) return '';
+    final formatter = DateFormat('dd MMMM yyyy');
+    return formatter.format(dt);
   }
 }
 
 class Source {
-  String id;
-  String name;
+  final String? id;
+  final String? name;
 
-  Source({
+  const Source({
     this.id,
     this.name,
   });
 
-  factory Source.fromRawJson(String str) => Source.fromJson(json.decode(str));
+  factory Source.fromRawJson(String str) =>
+      Source.fromJson(json.decode(str) as Map<String, dynamic>);
 
   String toRawJson() => json.encode(toJson());
 
   factory Source.fromJson(Map<String, dynamic> json) => Source(
-        id: json["id"] == null ? null : json["id"],
-        name: json["name"] == null ? null : json["name"],
+        id: json['id'] as String?,
+        name: json['name'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "name": name == null ? null : name,
+        'id': id,
+        'name': name,
       };
 }

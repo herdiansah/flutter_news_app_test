@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:flutter_news_app/src/theme/legacy_theme.dart";
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news_app/src/commonWidget/customWidget.dart';
@@ -9,6 +10,8 @@ import 'bloc/bloc.dart';
 import 'widget/newsCard.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   Widget _headerNews(Article article) {
     return Builder(
       builder: (context) {
@@ -25,7 +28,7 @@ class HomePage extends StatelessWidget {
                   tag: 'headerImage',
                   child: article.urlToImage == null
                       ? Container()
-                      : customImage(article.urlToImage),
+                      : customImage(article.urlToImage ?? ""),
                 ),
                 Container(
                   padding:
@@ -41,7 +44,7 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(article.title,
+                      Text(article.title ?? "",
                           style: AppTheme.h4Style.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.onSurface)),
@@ -62,7 +65,7 @@ class HomePage extends StatelessWidget {
   Widget _body(
     BuildContext context,
     List<Article> list, {
-    String type,
+    String type = "",
   }) {
     return CustomScrollView(
       slivers: <Widget>[
@@ -71,7 +74,7 @@ class HomePage extends StatelessWidget {
           title: Text(
             '${type.toUpperCase()} NEWS',
             style: AppTheme.h2Style
-                .copyWith(color: Theme.of(context).colorScheme.primaryVariant),
+                .copyWith(color: Theme.of(context).colorScheme.primaryContainer),
           ),
           backgroundColor: Theme.of(context).bottomAppBarColor,
           pinned: true,
@@ -93,21 +96,18 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: Theme.of(context).backgroundColor,
-        statusBarColor: Theme.of(context).backgroundColor));
+        systemNavigationBarColor: Theme.of(context).colorScheme.surface,
+        statusBarColor: Theme.of(context).colorScheme.surface));
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: BlocBuilder<NewsBloc, NewsState>(
           builder: (context, state) {
-            if (state == null) {
-              return Center(child: Text('Null block'));
-            }
             if (state is Failure) {
               return Center(child: Text('Something went wrong'));
             }
             if (state is Loaded) {
-              if (state.items == null || state.items.isEmpty) {
+              if (state.items.isEmpty) {
                 return Text('No content avilable');
               } else {
                 return _body(context, state.items, type: state.type);

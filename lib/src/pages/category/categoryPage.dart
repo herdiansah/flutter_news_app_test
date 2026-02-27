@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:flutter_news_app/src/theme/legacy_theme.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news_app/src/commonWidget/bloc/bloc.dart';
 import 'package:flutter_news_app/src/commonWidget/customWidget.dart';
@@ -6,11 +7,12 @@ import 'package:flutter_news_app/src/pages/homePage/bloc/bloc.dart';
 import 'package:flutter_news_app/src/theme/theme.dart';
 
 class CategoryPage extends StatefulWidget {
-  final PageController controller;
-  CategoryPage({Key key, this.controller}) : super(key: key);
+  final PageController? controller;
+  const CategoryPage({super.key, this.controller});
 
   @override
-  _CategoryPageState createState() => _CategoryPageState();
+
+  State<CategoryPage> createState() => _CategoryPageState();
 }
 
 class _CategoryPageState extends State<CategoryPage> {
@@ -20,7 +22,7 @@ class _CategoryPageState extends State<CategoryPage> {
           BlocProvider.of<NewsBloc>(context).add(Fetch(type: type));
           BlocProvider.of<NavigationBloc>(context).add(Navigate(pageIndex: 0));
 
-          widget.controller.animateTo(0,
+          widget.controller?.animateTo(0,
               duration: Duration(milliseconds: 300), curve: Curves.linear);
         },
         child: Stack(
@@ -42,7 +44,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           elevation: 0,
           centerTitle: false,
@@ -62,7 +64,7 @@ class _CategoryPageState extends State<CategoryPage> {
           ],
           // bottom:PreferredSize(child:  Divider(height: 0,), preferredSize: Size(10,0))
         ),
-        body: Container(
+        body: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: GridView.count(
             padding: EdgeInsets.symmetric(vertical: 20),

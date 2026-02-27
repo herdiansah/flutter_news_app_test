@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "package:flutter_news_app/src/theme/legacy_theme.dart";
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_news_app/src/commonWidget/customWidget.dart';
 import 'package:flutter_news_app/src/models/newsResponseModel.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_news_app/src/pages/newsDetail/bloc/bloc.dart';
 import 'package:flutter_news_app/src/theme/theme.dart';
 
 class VideoNewsPage extends StatelessWidget {
+  const VideoNewsPage({super.key});
+
   Widget _headerNews(BuildContext context, Article article) {
     return InkWell(
         onTap: () {
@@ -15,7 +18,7 @@ class VideoNewsPage extends StatelessWidget {
               .add(SelectNewsForDetail(article: article));
           Navigator.pushNamed(context, '/detail');
         },
-        child: Container(
+        child: SizedBox(
             width: MediaQuery.of(context).size.width * 6,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(0),
@@ -24,7 +27,7 @@ class VideoNewsPage extends StatelessWidget {
                   children: <Widget>[
                     article.urlToImage == null
                         ? Container()
-                        : customImage(article.urlToImage, fit: BoxFit.fitWidth),
+                        : customImage(article.urlToImage ?? "", fit: BoxFit.fitWidth),
                     Container(
                       padding: EdgeInsets.only(left: 20, right: 10, bottom: 20),
                       alignment: Alignment.bottomCenter,
@@ -32,7 +35,7 @@ class VideoNewsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
-                          Text(article.title,
+                          Text(article.title ?? "",
                               style: AppTheme.h2Style.copyWith(
                                   color:
                                       Theme.of(context).colorScheme.onSurface)),
@@ -73,7 +76,7 @@ class VideoNewsPage extends StatelessWidget {
   Widget _body(
     BuildContext context,
     List<Article> list, {
-    String type,
+    String type = "",
   }) {
     return CustomScrollView(
       slivers: <Widget>[
@@ -111,17 +114,14 @@ class VideoNewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: SafeArea(
             child: BlocBuilder<NewsBloc, NewsState>(builder: (context, state) {
-          if (state == null) {
-            return Center(child: Text('Null block'));
-          }
           if (state is Failure) {
             return Center(child: Text('Something went wrong'));
           }
           if (state is Loaded) {
-            if (state.items == null || state.items.isEmpty) {
+            if (state.items.isEmpty) {
               return Text('No content avilable');
             } else {
               return _body(context, state.items, type: state.type);

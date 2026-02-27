@@ -11,14 +11,16 @@ import 'src/pages/newsDetail/bloc/bloc.dart';
 import 'src/resources/repository.dart';
 
 void main() {
-  BlocObserver observer = SimpleBlocObserver();
-  runApp(MyApp());
+  // bloc 8.x uses a global observer
+  Bloc.observer = SimpleBlocObserver();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    ThemeData apptheme;
     return MultiBlocProvider(
       providers: [
         BlocProvider<NewsBloc>(
@@ -31,20 +33,20 @@ class MyApp extends StatelessWidget {
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
+          // default theme (avoid uninitialized ThemeData)
+          ThemeData appTheme = AppTheme.lightTheme;
+
           if (state is SelectedTheme) {
-            apptheme = state.themeType != ThemeType.Light
+            appTheme = state.themeType == ThemeType.light
                 ? AppTheme.lightTheme
                 : AppTheme.darkTheme;
           }
-          return Builder(
-            builder: (context) {
-              return MaterialApp(
-                title: 'Flutter Demo',
-                theme: apptheme,
-                debugShowCheckedModeBanner: false,
-                routes: Routes.getRoute(),
-              );
-            },
+
+          return MaterialApp(
+            title: 'Flutter News App',
+            theme: appTheme,
+            debugShowCheckedModeBanner: false,
+            routes: Routes.getRoute(),
           );
         },
       ),

@@ -7,14 +7,15 @@ import 'homePage/homePage.dart';
 import 'profile/profilePage.dart';
 
 class NewsApp extends StatefulWidget {
-  NewsApp({Key key}) : super(key: key);
+  const NewsApp({super.key});
 
   @override
-  _NewsAppState createState() => _NewsAppState();
+
+  State<NewsApp> createState() => _NewsAppState();
 }
 
 class _NewsAppState extends State<NewsApp> {
-  PageController _controller = PageController();
+  final PageController _controller = PageController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
